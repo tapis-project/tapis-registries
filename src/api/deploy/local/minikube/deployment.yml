@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: registries-api-deployment
+spec:
+  selector:
+    matchLabels:
+      app: registries-api-deployment
+  template:
+    metadata:
+      labels:
+        app: registries-api-deployment
+    spec:
+      containers:
+      - command: [ "/bin/sh", "-c" ]
+        args:
+          - "./scripts/start.sh;"
+        env:
+          - name: ENV
+            value: LOCAL
+          - name: BROKER_USER
+            value: dev
+          - name: BROKER_PASSWORD
+            value: dev
+          - name: BROKER_PORT
+            value: "5672"
+          - name: DB_HOST
+            value: registries-postgres-service
+          - name: DB_NAME
+            value: registries
+          - name: DB_PASSWORD
+            value: dev
+          - name: DB_USER
+            value: registries
+          - name: LOG_LEVEL
+            value: DEBUG
+          - name: DJANGO_SECRET_KEY
+            value: 'django-insecure-_!+8ppjzrs!$8l5n2k)^ry2=c&jkrxcx+w_a%!gcm4)u2@=_b2'
+          - name: DJANGO_SUPERUSER_EMAIL
+            value: nfreeman@tacc.utexas.edu
+          - name: DJANGO_SUPERUSER_PASSWORD
+            value: dev
+          - name: DJANGO_SUPERUSER_USERNAME
+            value: nathandf
+          - name: TAPIS_SERVICE_SITE_ID
+            value: tacc
+          - name: TAPIS_SERVICE_TENANT_ID
+            value: admin
+          - name: TAPIS_DEV_URL
+            value: https://dev.develop.tapis.io
+          - name: TAPIS_CONFIG_PATH
+            value: "/src/backend/config.json"
+          - name: TAPIS_CONFIGSCHEMA_PATH
+            value: "/src/backend/configschema.json"
+          - name: REGISTRIES_SERVICE_URL
+            value: https://admin.develop.tapis.io
+          - name: REGISTRIES_SERVICE_ACCOUNT
+            value: registries
+          - name: REGISTRIES_SERVICE_PASSWORD
+            value: "test"
+          # - name: REGISTRIES_SERVICE_PASSWORD
+          #   valueFrom:
+          #     secretKeyRef:
+          #       name: tapis-registries-secrets
+          #       key: service-password
+        image: tapis/registries-api:dev
+        imagePullPolicy: Always
+        name: registries-api
+        ports:
+          - containerPort: 8000
+            name: gunicorn
+        resources: {}
+        tty: true
