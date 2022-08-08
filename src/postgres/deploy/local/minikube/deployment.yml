@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: registries-postgres-deployment
+  name: registries-postgres-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: registries-postgres-deployment
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: registries-postgres-deployment
+    spec:
+      initContainers:
+        - name: postgres-init
+          imagePullPolicy: Always
+          image: postgres:14.4
+          command: [ "/bin/bash", "-c"]
+          args:
+            - "bash"
+            - "./init/postgres-init.sh"
+          env:
+          - name: POSTGRES_PASSWORD
+            value: dev
+          - name: POSTGRES_USER
+            value: registries
+          - name: POSTGRES_DB
+            value: registries
+          volumeMounts:
+            - name: registries-postgres-pvc
+              mountPath: /var/lib/postgresql/data
+            - name: postgres-init-script
+              mountPath: /init
+      containers:
+        - name: registries-postgres
+          env:
+          - name: POSTGRES_PASSWORD
+            value: dev
+          - name: POSTGRES_USER
+            value: registries
+          - name: POSTGRES_DB
+            value: registries
+          image: postgres:14.4
+          ports:
+            - containerPort: 5432
+          resources: {}
+          volumeMounts:
+            - name: registries-postgres-pvc
+              mountPath: /var/lib/postgresql/data
+            - name: postgres-init-script
+              mountPath: /init
+      restartPolicy: Always
+      volumes:
+        - name: registries-postgres-pvc
+          persistentVolumeClaim:
+            claimName: registries-postgres-pvc
+        - name: postgres-init-script
+          configMap:
+            name: registries-postgres-init-configmap
+    
+status: {}

@@ -1,0 +1,33 @@
+{
+    "name": "registries",
+    "displayName": "Tapis Registries",
+    "projectPattern": "monorepo",
+    "prodImageTag": "1.2",
+    "deploymentType": "minikube",
+    "categories": {
+        "api": [
+            {
+                "name": "api",
+                "displayName": "API",
+                "language": "python",
+                "framework": "django",
+                "image": "tapis/registries-api",
+                "buildable": true,
+                "startable": true,
+                "uses": ["database.postgres"]
+            }
+        ],
+        "frontend": [],
+        "broker": [],
+        "database": [
+            {
+                "name": "postgres",
+                "displayName": "Postgres database",
+                "image": "postgres",
+                "imageTag": "14.4"
+            }
+        ],
+        "proxy": [],
+        "service": []
+    }
+}

@@ -55,14 +55,12 @@ spec:
           - name: REGISTRIES_SERVICE_URL
             value: https://admin.develop.tapis.io
           - name: REGISTRIES_SERVICE_ACCOUNT
-            value: registries
+            value: workflows # TODO change to 'registries' once set up
           - name: REGISTRIES_SERVICE_PASSWORD
-            value: "test"
-          # - name: REGISTRIES_SERVICE_PASSWORD
-          #   valueFrom:
-          #     secretKeyRef:
-          #       name: tapis-registries-secrets
-          #       key: service-password
+            valueFrom:
+              secretKeyRef:
+                name: tapis-workflows-secrets # TODO change to 'tapis-registries-secrets' once set up
+                key: service-password
         image: tapis/registries-api:dev
         imagePullPolicy: Always
         name: registries-api

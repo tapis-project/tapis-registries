@@ -4,6 +4,12 @@ from typing import AnyStr, List, Union, Dict, TypedDict, Literal
 from typing_extensions import Annotated
 from pydantic import BaseModel, validator, root_validator, Field
 
+
+# Auth
+class AuthRequest(BaseModel):
+    username: str
+    password: str
+
 class Storage:
     id: str
     type: str

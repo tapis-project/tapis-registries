@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: registries-postgres-init-configmap
+data:
+  postgres-init.sh: |
+    -- Create database and user if not exists
+    psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" << EOB
+    CREATE USER IF NOT EXISTS ${POSTGRES_USER} IDENTIFIED BY "${POSTGRESS_PASSWORD}";
+    CREATE DATABASE IF NOT EXISTS ${POSTGRES_DB};
+    GRANT ALL PRIVILEGES ON ${POSTGRES_DB}.* TO "${POSTGRES_USER}";
+    EOB

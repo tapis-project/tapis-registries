@@ -17,8 +17,7 @@ from pathlib import Path
 ENVS = ["LOCAL", "DEV", "STAGE", "PROD"]
 
 # The environment in which the application is currently deployed
-# ENV = os.environ["ENV"] # TODO
-ENV = "LOCAL"
+ENV = os.environ["ENV"]
 
 
 # Set url prefix based on env
@@ -49,6 +48,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'backend',
 ]
 
 MIDDLEWARE = [
@@ -85,12 +86,18 @@ WSGI_APPLICATION = 'registries.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+# Database
+# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.environ["DB_NAME"],
+        "HOST": os.environ["DB_HOST"],
+        "USER": os.environ["DB_USER"],
+        "PASSWORD": os.environ["DB_PASSWORD"]
     }
 }
+
 
 
 # Password validation
